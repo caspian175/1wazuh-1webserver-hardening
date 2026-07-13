@@ -85,12 +85,12 @@ case $OPCION in
         ;;
     2)
         echo "[EJECUCIÓN] Iniciando Hardening en Servidor Web con sudo..."
-        sudo ansible-playbook -i web-server/inventory.ini web-server/hardening_web.yml
+        sudo ansible-playbook -i web-server/inventory.ini web-server/hardening_web.yml -K
         ;;
     3)
         echo "[EJECUCIÓN] Orquestando Hardening Completo en ambas plataformas con sudo..."
         sudo ansible-playbook -i wazuh-manager/inventory.ini wazuh-manager/hardening_manager.yml
-        sudo ansible-playbook -i web-server/inventory.ini web-server/hardening_web.yml
+        sudo ansible-playbook -i web-server/inventory.ini web-server/hardening_web.yml -K
         ;;
     4)
         echo "Proceso finalizado por el usuario."
