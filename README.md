@@ -1,4 +1,4 @@
-# Infraestructura como Código (IaC): Hardening de Seguridad con Ansible
+# Hardening de Seguridad con Ansible
 
 Este repositorio contiene una solución modular, reproducible y automatizada para aplicar una línea base de seguridad inspirada en los controles **CIS Benchmarks** sobre dos entornos distintos: el **Wazuh Manager (VM2)** y el **Servidor Web / Base de Datos (VM1)**.
 
@@ -23,3 +23,4 @@ Los playbooks de Ansible incluidos ejecutan de manera limpia y segura las siguie
    ```bash
    git clone https://github.com/caspian175/1wazuh-1webserver-hardening.git
    cd ansible-hardening-lab
+   chmod +x setup.sh
