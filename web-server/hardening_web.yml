@@ -1,80 +1,50 @@
 ---
-- name: Hardening de Seguridad CIS para Servidor Web y Base de Datos
+- name: Hardening del Servidor Web (VM1)
   hosts: web_server
   become: yes
-  become_method: sudo
-
   tasks:
-    - name: 1. GESTIÓN DE POLÍTICAS DE CONTRASEÑAS
-      name: Configurar envejecimiento de contraseñas en /etc/login.defs
-      lineinfile:
-        path: /etc/login.defs
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      loop:
-        - { regexp: '^PASS_MAX_DAYS', line: 'PASS_MAX_DAYS   90' }
-        - { regexp: '^PASS_MIN_DAYS', line: 'PASS_MIN_DAYS   7' }
-        - { regexp: '^PASS_WARN_AGE', line: 'PASS_WARN_AGE   7' }
-
-    - name: Configurar complejidad de contraseñas (pam_pwquality)
-      lineinfile:
+    - name: 1. Configurar politica de contraseñas (pam_pwquality)
+      ansible.builtin.lineinfile:
         path: /etc/security/pwquality.conf
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      loop:
-        - { regexp: '^#?minlen', line: 'minlen = 14' }
-        - { regexp: '^#?dcredit', line: 'dcredit = -1' }
-        - { regexp: '^#?ucredit', line: 'ucredit = -1' }
-        - { regexp: '^#?lcredit', line: 'lcredit = -1' }
-        - { regexp: '^#?ocredit', line: 'ocredit = -1' }
+        regexp: '^#?\s*minlen\s*='
+        line: 'minlen = 12'
 
-    - name: 2. DESHABILITACIÓN DE SERVICIOS INSEGUROS O INNECESARIOS
-      name: Asegurar que servicios innecesarios estén detenidos y deshabilitados
-      systemd:
+    - name: 2. Deshabilitar servicios innecesarios
+      ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
         enabled: no
-      failed_when: false
       loop:
         - postfix
         - avahi-daemon
-        - cockpit.socket
+      failed_when: false
 
-    - name: 3. CONFIGURACIÓN ESTRICTA DEL FIREWALL LOCAL
-      name: Asegurar que firewalld esté corriendo
-      systemd:
+    - name: 3. Asegurar que firewalld este iniciado
+      ansible.builtin.service:
         name: firewalld
         state: started
         enabled: yes
 
-    - name: Permitir puertos legítimos de la aplicación Web y SSH
-      firewalld:
+    - name: 4. Permitir puertos legitimos de la aplicacion Web y SSH
+      ansible.posix.firewalld:
         port: "{{ item }}"
         permanent: yes
         state: enabled
         immediate: yes
       loop:
-        - 22/tcp   # SSH
-        - 80/tcp   # HTTP
-        - 443/tcp  # HTTPS
-      # Nota: El puerto de MariaDB (3306) NO se abre porque la base de datos es estrictamente local.
+        - 22/tcp
+        - 80/tcp
+        - 443/tcp
 
-    - name: 4. RESTRICCIÓN DE ACCESO REMOTO (SSH)
-      name: Hardening del servicio SSH
-      lineinfile:
+    - name: 5. Hardening de SSH (Bloquear root de forma directa)
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-        state: present
-      loop:
-        - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
-        - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 4' }
-        - { regexp: '^#?ClientAliveInterval', line: 'ClientAliveInterval 300' }
-        - { regexp: '^#?ClientAliveCountMax', line: 'ClientAliveCountMax 0' }
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
       notify: Reiniciar SSH
 
   handlers:
     - name: Reiniciar SSH
-      systemd:
+      ansible.builtin.service:
         name: sshd
         state: restarted
