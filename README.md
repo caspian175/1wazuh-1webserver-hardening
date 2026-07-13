@@ -29,44 +29,7 @@ Antes de ejecutar el script de automatización, la infraestructura debe cumplir 
 
 ---
 
-## Diagrama de Arquitectura de Red y Flujo de Logs
-
-```mermaid
-graph TD
-    classDef vms fill:#2b2b2b,stroke:#4e4e4e,stroke-width:2px,color:#ffffff;
-    classDef nets fill:#1f3a52,stroke:#2e5c84,stroke-width:1px,color:#ffffff;
-    classDef inter fill:#3a3a3a,stroke:#555,stroke-width:1px,stroke-dasharray: 5 5,color:#ffffff;
-
-    NET[Red Externa / Internet <br> Modo Puente - DHCP] ::: nets
-    LAN[Subnet de Gestión Aislada <br> Red Interna - 192.168.100.0/24] ::: nets
-
-    subgraph VM1 [VM1 - SERVIDOR WEB]
-        direction TB
-        enp0s3_1[Interfaz: enp0s3 <br> IP: Dinámica DHCP] ::: inter
-        enp0s8_1[Interfaz: enp0s8 <br> IP: 192.168.100.10] ::: inter
-        APP[Aplicación Web / Apache]
-        AG[Wazuh Agent]
-        SSH1[Servicio: sshd Port 22]
-    end
-    style VM1 fill:#1a1a1a,stroke:#ff9900,stroke-width:2px,color:#ffffff;
-
-    subgraph VM2 [VM2 - WAZUH MANAGER]
-        direction TB
-        enp0s3_2[Interfaz: enp0s3 <br> IP: Dinámica DHCP] ::: inter
-        enp0s8_2[Interfaz: enp0s8 <br> IP: 192.168.100.20] ::: inter
-        DASH[Wazuh Dashboard & Engine]
-        ANS[Ansible Core]
-    end
-    style VM2 fill:#1a1a1a,stroke:#00aaff,stroke-width:2px,color:#ffffff;
-
-    NET === enp0s3_1
-    NET === enp0s3_2
-    enp0s8_1 === LAN
-    enp0s8_2 === LAN
-
-    ANS -- "Orquestación Automatizada <br> Puerto 22/TCP SSH" --> SSH1
-    AG -- "Envío de Telemetría y Logs <br> Puerto 1514/TCP" --> DASH
-
+## Ejecución
    git clone https://github.com/caspian175/1wazuh-1webserver-hardening.git
    cd ansible-hardening-lab
    chmod +x setup.sh
