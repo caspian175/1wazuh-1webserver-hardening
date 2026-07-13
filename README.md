@@ -21,5 +21,5 @@ Los playbooks de Ansible incluidos ejecutan de manera limpia y segura las siguie
 
 1. Clona este repositorio en tu máquina virtual Wazuh Manager (VM2):
    ```bash
-   git clone <URL_DE_TU_REPOSITORIO_GITHUB>
+   git clone https://github.com/caspian175/1wazuh-1webserver-hardening.git
    cd ansible-hardening-lab
