@@ -1,5 +1,3 @@
-# 1wazuh-1webserver-hardening
-Markdown
 # Infraestructura como Código (IaC): Hardening de Seguridad con Ansible
 
 Este repositorio contiene una solución modular, reproducible y automatizada para aplicar una línea base de seguridad inspirada en los controles **CIS Benchmarks** sobre dos entornos distintos: el **Wazuh Manager (VM2)** y el **Servidor Web / Base de Datos (VM1)**.
