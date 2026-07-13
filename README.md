@@ -2,7 +2,7 @@
 
 Este repositorio contiene una solución modular y automatizada para aplicar una línea base de seguridad inspirada en los controles **CIS Benchmarks** sobre dos entornos distintos: el **Wazuh Manager (VM2)** y el **Servidor Web (VM1)**. 
 
-Toda la orquestación y el robustecimiento del sistema se realizan de manera centralizada desde el Nodo de Control (VM2) a través de un asistente interactivo en Bash (`setup.sh`).
+Toda la configuración y el robustecimiento del sistema se realizan de manera centralizada desde el Nodo de Control (VM2) a través de un asistente interactivo en Bash (`setup.sh`).
 
 ---
 
