@@ -30,6 +30,6 @@ Antes de ejecutar el script de automatización, la infraestructura debe cumplir 
 ---
 
 ## Ejecución
-   git clone https://github.com/caspian175/1wazuh-1webserver-hardening.git
-   cd ansible-hardening-lab
-   chmod +x setup.sh
+   1. git clone https://github.com/caspian175/1wazuh-1webserver-hardening.git
+   2. cd ansible-hardening-lab
+   3. chmod +x setup.sh
